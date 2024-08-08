@@ -7,4 +7,7 @@ class StaticController < ApplicationController
 
   def compression
   end
+
+  def limit
+  end
 end

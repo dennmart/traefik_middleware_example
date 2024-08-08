@@ -10,4 +10,5 @@ Rails.application.routes.draw do
 
   get "secret" => "static#secret"
   get "compression" => "static#compression"
+  get "limit" => "static#limit"
 end
