@@ -1,0 +1,51 @@
+service: traefik-middleware-example
+image: dennmart/my-app
+
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - 123.123.123.123
+    labels:
+      ###
+      # Labels for setting up BasicAuth middleware
+      ###
+      # traefik.http.routers.app.rule: Path(`/secret`)
+      # traefik.http.routers.app.middlewares: test-auth
+      # traefik.http.middlewares.test-auth.basicauth.users: "user:$2y$05$yGohYB1ELdyKfIOrQ2sjTuVIN9MnGAWHlYNCCcfBr0ToAu7OVM.iG"
+
+      ###
+      # Labels for setting up RateLimit middleware
+      ###
+      # traefik.http.routers.app.rule: Path(`/limit`)
+      # traefik.http.routers.app.middlewares: test-ratelimit
+      # traefik.http.middlewares.test-ratelimit.ratelimit.average: 30
+      # traefik.http.middlewares.test-ratelimit.ratelimit.period: 1m
+      # traefik.http.middlewares.test-ratelimit.ratelimit.burst: 5
+
+      ###
+      # Labels for setting up Compress middleware
+      ###
+      # traefik.http.routers.app.rule: Path(`/compress`)
+      # traefik.http.routers.app.middlewares: test-compress
+      # traefik.http.middlewares.test-compress.compress: true
+
+# Credentials for your image host.
+registry:
+  server: ghcr.io
+  username: dennmart
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    RAILS_ENV: production
+    RACK_ENV: production
+    RAILS_LOG_TO_STDOUT: true
+    RAILS_SERVE_STATIC_FILES: true
+  secret:
+    - RAILS_MASTER_KEY
+
+builder:
+  multiarch: false
+  context: .
